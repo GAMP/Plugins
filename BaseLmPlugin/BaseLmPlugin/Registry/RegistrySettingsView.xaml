@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="BaseLmPlugin.RegistrySettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:ms="clr-namespace:Microsoft.Win32;assembly=mscorlib"
+    Height="Auto" Width="Auto">
+    <UserControl.Resources>      
+        <ObjectDataProvider x:Key="valueKinds" MethodName="GetValues"  ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="ms:RegistryValueKind" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <Grid>
+    	<StackPanel Height="Auto" Width="Auto">
+    		<DockPanel Margin="2,2,2,2" Width="Auto" Height="Auto">
+    			<TextBlock Text="Registry Key" TextWrapping="Wrap" Width="100"/>
+    			<ComboBox 
+								Height="Auto" 
+								IsSynchronizedWithCurrentItem="True" 
+								Width="Auto" 
+								SelectedIndex="{Binding Hive, Converter={StaticResource HiveConverter}}">
+    				<ComboBoxItem Content="HKEY_CLASSES_ROOT"/>
+    				<ComboBoxItem Content="HKEY_CURRENT_USER"/>
+    				<ComboBoxItem Content="HKEY_LOCAL_MACHINE"/>
+    				<ComboBoxItem Content="HKEY_USERS"/>
+    				<ComboBoxItem Content="HKEY_CURRENT_CONFIG"/>
+    				<ComboBoxItem Content="HKEY_PERFORMANCE_DATA"/>
+    				<ComboBoxItem Content="HKEY_DYN_DATA"/>
+    			</ComboBox>
+    		</DockPanel>
+            <DockPanel Margin="2,2,2,2" Width="Auto" Height="Auto">
+                <TextBlock Text="Value Kind" TextWrapping="Wrap" Width="100"/>
+                <ComboBox SelectedItem="{Binding ValueKind}" 
+				ItemsSource="{Binding Source={StaticResource valueKinds}}" 
+				Height="Auto" 
+				IsSynchronizedWithCurrentItem="True" 
+				Width="Auto">
+                </ComboBox>
+            </DockPanel>
+            <DockPanel Margin="2,2,2,2" Width="Auto" Height="Auto">
+    			<TextBlock Text="Registry Path" TextWrapping="Wrap" Width="100"/>
+    			<TextBox Text="{Binding RegistryPath}" TextWrapping="Wrap" Width="Auto" Height="Auto"/>
+    		</DockPanel>    	
+    	</StackPanel>
+    </Grid>
+</UserControl>
