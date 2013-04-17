@@ -5,33 +5,29 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	x:Class="BaseLmPlugin.ProcessLicenseManagerView"
-	x:Name="UserControl"
-	d:DesignWidth="608" 
-    d:DesignHeight="93">
-
-	<Grid x:Name="LayoutRoot">
-		<StackPanel Height="Auto" Width="Auto" HorizontalAlignment="Stretch">
-			<DockPanel Width="Auto" Height="Auto" Margin="2,2,2,2">
-				<TextBlock Text="Executable Path" TextWrapping="Wrap" Width="100" Height="19.2766666666667" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-				<TextBox  TextWrapping="Wrap" Width="Auto" Height="Auto">
-				<Binding Mode="TwoWay" ValidatesOnDataErrors="True" Path="ExecutablePath"/>
-				</TextBox>
-			</DockPanel>
-			<DockPanel Width="Auto" Height="Auto" Margin="2,2,2,2">
-				<TextBlock Text="Working Directory" TextWrapping="Wrap" Width="100" Height="19.2766666666667" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-				<TextBox  TextWrapping="Wrap" Width="Auto" Height="Auto" Text="{Binding WorkingDirectory, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
-			</DockPanel>
-			<DockPanel Width="Auto" Height="Auto" Margin="2,2,2,2">
-				<TextBlock Text="Arguments" TextWrapping="Wrap" Width="100" Height="19.2766666666667" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-				<TextBox  TextWrapping="Wrap" Width="Auto" Height="Auto">
-					<Binding Mode="TwoWay" ValidatesOnDataErrors="True" Path="Arguments"/>
-				</TextBox>
-			</DockPanel>
+	x:Name="UserControl">
+    <Grid x:Name="LayoutRoot">
+        <StackPanel Height="Auto" Width="Auto" HorizontalAlignment="Stretch">
+            <DockPanel Width="Auto" Height="Auto" Margin="2,2,2,2">
+                <TextBlock Text="Executable Path" TextWrapping="Wrap" Width="100" Height="19.2766666666667" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBox  TextWrapping="Wrap" Width="Auto" Height="Auto">
+                    <Binding Mode="TwoWay" ValidatesOnDataErrors="True" Path="ExecutablePath"/>
+                </TextBox>
+            </DockPanel>
+            <DockPanel Width="Auto" Height="Auto" Margin="2,2,2,2">
+                <TextBlock Text="Working Directory" TextWrapping="Wrap" Width="100" Height="19.2766666666667" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBox  TextWrapping="Wrap" Width="Auto" Height="Auto" Text="{Binding WorkingDirectory, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+            </DockPanel>
+            <DockPanel Width="Auto" Height="Auto" Margin="2,2,2,2">
+                <TextBlock Text="Arguments" TextWrapping="Wrap" Width="100" Height="19.2766666666667" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBox  TextWrapping="Wrap" Width="Auto" Height="Auto">
+                    <Binding Mode="TwoWay" ValidatesOnDataErrors="True" Path="Arguments"/>
+                </TextBox>
+            </DockPanel>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <CheckBox Content="Wait for exit" IsChecked="{Binding WaitForExit}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2"/>
                 <CheckBox Content="Hide" IsChecked="{Binding Hide}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2"/>
             </StackPanel>
-	
-		</StackPanel>
-	</Grid>
+        </StackPanel>
+    </Grid>
 </UserControl>

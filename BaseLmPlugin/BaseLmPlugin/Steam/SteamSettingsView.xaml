@@ -5,28 +5,26 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	x:Class="BaseLmPlugin.SteamSettingsView"
-	x:Name="UserControl"
-	d:DesignWidth="348.667" d:DesignHeight="198.667">
-
-	<Grid x:Name="LayoutRoot">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
-		<CheckBox Content="Child exit terminate" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding TerminateOnChildExit}" Margin="2" Grid.Row="1"/>
-		<StackPanel d:LayoutOverrides="Height" IsEnabled="{Binding TerminateOnChildExit}">
-			<DockPanel Margin="1">
-				<TextBlock TextWrapping="Wrap" Text="Wait timeout [Seconds]" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130"/>
-				<TextBox Text="{Binding ChildWaitTimeout, UpdateSourceTrigger=PropertyChanged}" 
+	x:Name="UserControl">
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <CheckBox Content="Child exit terminate" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding TerminateOnChildExit}" Margin="2" Grid.Row="1"/>
+        <StackPanel d:LayoutOverrides="Height" IsEnabled="{Binding TerminateOnChildExit}">
+            <DockPanel Margin="1">
+                <TextBlock TextWrapping="Wrap" Text="Wait timeout [Seconds]" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130"/>
+                <TextBox Text="{Binding ChildWaitTimeout, UpdateSourceTrigger=PropertyChanged}" 
                          VerticalAlignment="Top" IsEnabled="{Binding TerminateOnChildExit}" 
                          MaxLength="3" HorizontalAlignment="Left" Width="35"/>
-			</DockPanel>
-			<DockPanel Margin="1" VerticalAlignment="Center">
-				<TextBlock TextWrapping="Wrap" Text="Child list" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130"/>
-				<TextBox TextWrapping="Wrap" 
+            </DockPanel>
+            <DockPanel Margin="1" VerticalAlignment="Center">
+                <TextBlock TextWrapping="Wrap" Text="Child list" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130"/>
+                <TextBox TextWrapping="Wrap" 
 					Text="{Binding ChildIgnoreList, UpdateSourceTrigger=PropertyChanged}" 
 					AcceptsReturn="True" MaxLines="3" VerticalScrollBarVisibility="Auto"/>
-			</DockPanel>
-		</StackPanel>
-	</Grid>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
 </UserControl>

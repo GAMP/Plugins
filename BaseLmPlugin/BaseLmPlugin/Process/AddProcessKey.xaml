@@ -5,10 +5,9 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	x:Class="BaseLmPlugin.AddProcessKey"
-	x:Name="UserControl"
-	d:DesignWidth="202" d:DesignHeight="38">
+	x:Name="UserControl">
 
-	<Grid x:Name="LayoutRoot">
-		<TextBox TextWrapping="Wrap" Text="{Binding Key.Value}" VerticalAlignment="Center" Width="200"/>
-	</Grid>
+    <Grid x:Name="LayoutRoot">
+        <TextBox TextWrapping="Wrap" Text="{Binding Key.Value}" VerticalAlignment="Center" Width="200"/>
+    </Grid>
 </UserControl>

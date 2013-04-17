@@ -6,25 +6,24 @@
 	mc:Ignorable="d"
 	x:Class="BaseLmPlugin.AddSteamKey"
 	x:Name="UserControl"
-	d:DesignWidth="284" d:DesignHeight="53" Width="300">
-
-	<Grid x:Name="LayoutRoot" DataContext="{Binding Key}">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
+    Width="300">
+    <Grid x:Name="LayoutRoot" DataContext="{Binding Key}">
+        <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
-		<DockPanel VerticalAlignment="Bottom">
-			<TextBlock TextWrapping="Wrap" Text="Username" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80" Foreground="White"/>
-			<TextBox TextWrapping="Wrap" Margin="2" Text="{Binding Username}" MaxLength="255"/>
-		</DockPanel>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel VerticalAlignment="Bottom">
+            <TextBlock TextWrapping="Wrap" Text="Username" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80" Foreground="White"/>
+            <TextBox TextWrapping="Wrap" Margin="2" Text="{Binding Username}" MaxLength="255"/>
+        </DockPanel>
         <DockPanel x:Name="idField" VerticalAlignment="Bottom" Grid.Row="1">
             <TextBlock TextWrapping="Wrap" Text="Account ID" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80" Foreground="White"/>
             <TextBox TextWrapping="Wrap" Margin="2" Text="{Binding AccountId}" MaxLength="255"/>
         </DockPanel>
         <DockPanel VerticalAlignment="Bottom" Grid.Row="2">
-			<TextBlock TextWrapping="Wrap" Text="Password" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80" Foreground="White"/>
-			<TextBox TextWrapping="Wrap" Margin="2" Text="{Binding Password}" MaxLength="255"/>
-		</DockPanel>       
+            <TextBlock TextWrapping="Wrap" Text="Password" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80" Foreground="White"/>
+            <TextBox TextWrapping="Wrap" Margin="2" Text="{Binding Password}" MaxLength="255"/>
+        </DockPanel>
     </Grid>
 </UserControl>
