@@ -110,12 +110,10 @@ namespace BaseLmPlugin
                             uplayWindow.Activate();
 
                             //give some time to activate fields
-                            System.Threading.Thread.Sleep(1000);
-
+                            System.Threading.Thread.Sleep(5000);
 
                             //create input simulator
                             WindowsInput.KeyboardSimulator sim = new WindowsInput.KeyboardSimulator();
-
 
                             //clear username filed
                             sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.VK_A);
@@ -199,10 +197,10 @@ namespace BaseLmPlugin
         private string GetUplayPath()
         {
             string modulePath = string.Empty;
-            using (var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(@"SOFTWARE\Ubisoft\Launcher", false))
+            using (var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\Uplay", false))
             {
                 if (key != null)
-                    modulePath = Path.Combine(key.GetValue("InstallDir").ToString(), "Uplay.exe");
+                    modulePath = Path.Combine(key.GetValue("InstallLocation").ToString(), "Uplay.exe");
             }
             return modulePath;
         }
