@@ -221,67 +221,35 @@ namespace BaseLmPlugin
                     {
                         try
                         {
-                            //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
-
-                            //get window
-                            WindowInfo originWindow = new WindowInfo(originProcess.MainWindowHandle);
-
-                            OriginInputFileds focusedField = OriginInputFileds.None;
-                            OriginInputFileds checkedField = OriginInputFileds.None;
-
-                            //activate origin window
-                            originWindow.BringToFront();
-                            originWindow.Activate();
-
-                            //give some time to activate fields
-                            System.Threading.Thread.Sleep(1000);
-
-                            for (int i = 0; i <= 5; i++)
-                            {
-                                //grab snapshot
-                                var image = CoreLib.Imaging.Imaging.CaptureWindowImage(originProcess.MainWindowHandle);
-                                if (this.GetFields(image, ref focusedField, ref checkedField))
-                                {
-                                    if (focusedField != OriginInputFileds.None)
-                                        break;
-                                }
-                            }
-
                             //create input simulator
                             WindowsInput.KeyboardSimulator sim = new WindowsInput.KeyboardSimulator();
 
-                            for (int steps = this.GetInitialSteps(focusedField); steps > 0; steps--)
-                            {
-                                //tab to first field
-                                sim.KeyDown(WindowsInput.Native.VirtualKeyCode.TAB);
-                                //wait between tabs
-                                System.Threading.Thread.Sleep(100);
-                            }
+                            if (!this.FocusField(originProcess, OriginInputFileds.Username, 50))
+                                return;
 
                             //clear username filed
                             sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.VK_A);
 
                             //send back to clear any possible typed value
-                            sim.KeyDown(WindowsInput.Native.VirtualKeyCode.BACK);
+                            sim.KeyPress(WindowsInput.Native.VirtualKeyCode.BACK);
 
                             //set username
                             sim.TextEntry(license.KeyAs<UserNamePasswordLicenseKeyBase>().Username);
 
-                            //swicth field
-                            sim.KeyDown(WindowsInput.Native.VirtualKeyCode.TAB);
+                            if (!this.FocusField(originProcess, OriginInputFileds.Password, 50))
+                                return;
 
                             //clear password filed
                             sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.VK_A);
 
                             //send back to clear any possible typed value
-                            sim.KeyDown(WindowsInput.Native.VirtualKeyCode.BACK);
+                            sim.KeyPress(WindowsInput.Native.VirtualKeyCode.BACK);
 
                             //set password
                             sim.TextEntry(license.KeyAs<UserNamePasswordLicenseKeyBase>().Password);
 
                             //proceed with login
-                            sim.KeyDown(WindowsInput.Native.VirtualKeyCode.RETURN);
+                            sim.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
 
                             //set environment variable
                             Environment.SetEnvironmentVariable("LICENSEKEYUSER", license.KeyAs<OriginLicenseKey>().Username);
@@ -291,12 +259,6 @@ namespace BaseLmPlugin
                         {
                             throw;
                         }
-                        finally
-                        {
-                            //enable input
-                            Win32API.Modules.CS.User32.BlockInput(false);
-                        }
-
                     }
                     else
                     {
@@ -365,6 +327,8 @@ namespace BaseLmPlugin
                     return 2;
                 case OriginInputFileds.CreateAccount:
                     return 1;
+                case OriginInputFileds.None:
+                    return 2;
                 default: return 0;
             }
         }
@@ -376,14 +340,19 @@ namespace BaseLmPlugin
                 #region Get UI Fields State
                 using (var tr = new ImageTraverser(image))
                 {
-                    bool usernameFocused = tr[52, 145] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
-                    bool passwordFocused = tr[52, 203] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
-                    bool keepPasswordFocused = tr[52, 310] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
-                    bool keepPasswordChecked = tr[55, 319] == ColorTranslator.FromHtml("#FFB950").ToArgb();
-                    bool invisibleFocused = tr[52, 336] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
-                    bool invisibleChecked = tr[55, 346] == ColorTranslator.FromHtml("#FFB950").ToArgb();
-                    bool forgotPasswordFocused = tr[122, 235] == ColorTranslator.FromHtml("#106487").ToArgb();
-                    bool createAccountFocused = tr[107, 400] == ColorTranslator.FromHtml("#FFB071").ToArgb();
+                    bool usernameFocused = tr[45, 165] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
+
+                    bool passwordFocused = tr[45, 227] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
+
+                    bool keepPasswordFocused = tr[45, 340] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
+                    bool keepPasswordChecked = tr[50, 350] == ColorTranslator.FromHtml("#FF9900").ToArgb();
+
+                    bool invisibleFocused = tr[45, 367] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
+                    bool invisibleChecked = tr[50, 378] == ColorTranslator.FromHtml("#FF9900").ToArgb();
+
+                    bool forgotPasswordFocused = tr[200,271] == ColorTranslator.FromHtml("#000000").ToArgb();
+
+                    bool createAccountFocused = tr[142,447] == ColorTranslator.FromHtml("#000000").ToArgb();
 
                     if (passwordFocused) { focusedField = OriginInputFileds.Password; }
                     if (usernameFocused) { focusedField = OriginInputFileds.Username; }
@@ -403,6 +372,58 @@ namespace BaseLmPlugin
             {
                 return false;
             }
+        }
+
+        private bool FocusField(Process originProcess, OriginInputFileds field ,int tries)
+        {
+            WindowInfo window = new WindowInfo(originProcess.MainWindowHandle);
+            WindowsInput.KeyboardSimulator sim = new WindowsInput.KeyboardSimulator();
+         
+            for (int i = 0; i < tries; i++)
+            {
+                try
+                {
+                    Win32API.Modules.CS.User32.BlockInput(true);                    
+
+                    //reactivate window
+                    window.BringToFront();
+                    window.Activate();
+
+                    //create input variables
+                    OriginInputFileds focusedField = OriginInputFileds.None;
+                    OriginInputFileds checkedField = OriginInputFileds.None;
+
+                    bool aero_on =false ;
+
+                    //check if aero is on
+                    if (Environment.OSVersion.Version.Major > 5)
+                        Win32API.Modules.DwmApi.DwmIsCompositionEnabled(out aero_on);
+                 
+                    //grab snapshot
+                    var image =aero_on? Imaging.CaptureScreenRegion(originProcess.MainWindowHandle) : Imaging.CaptureWindowImage(originProcess.MainWindowHandle);
+
+                    if (this.GetFields(image, ref focusedField, ref checkedField))
+                    {
+                        if (focusedField == field)
+                            return true;
+                    }
+
+                    //send tab
+                    sim.KeyPress(WindowsInput.Native.VirtualKeyCode.TAB);
+
+                    //pause
+                    System.Threading.Thread.Sleep(250);
+                }
+                catch
+                {
+                    throw;
+                }
+                finally
+                {
+                    Win32API.Modules.CS.User32.BlockInput(false);
+                }
+            }
+            return false;
         }
 
         #endregion
