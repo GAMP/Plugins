@@ -20,7 +20,7 @@
     MaxHeight="350">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ContentPresenter Content="{Binding Content,Mode=OneWay}" Margin="2"/>

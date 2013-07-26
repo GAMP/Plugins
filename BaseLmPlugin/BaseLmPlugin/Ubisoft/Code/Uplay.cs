@@ -94,7 +94,7 @@ namespace BaseLmPlugin
                     //add process to context process list
                     context.AddProcess(uplayProcess, true);
 
-                    if (CoreProcess.WaitForWindowCreated(uplayProcess, 10000, true))
+                    if (CoreProcess.WaitForWindowCreated(uplayProcess, 30000, true))
                     {
                         try
                         {
@@ -112,32 +112,86 @@ namespace BaseLmPlugin
                             //give some time to activate fields
                             System.Threading.Thread.Sleep(5000);
 
+                            //disable input
+                            Win32API.Modules.CS.User32.BlockInput(true);
+                            //activate origin window
+                            uplayWindow.BringToFront();
+                            uplayWindow.Activate();
+
                             //create input simulator
                             WindowsInput.KeyboardSimulator sim = new WindowsInput.KeyboardSimulator();
 
                             //clear username filed
                             sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.VK_A);
 
+                            //disable input
+                            Win32API.Modules.CS.User32.BlockInput(true);
+                            //activate origin window
+                            uplayWindow.BringToFront();
+                            uplayWindow.Activate();
+
                             //send back to clear any possible typed value
                             sim.KeyDown(WindowsInput.Native.VirtualKeyCode.BACK);
+
+                            //disable input
+                            Win32API.Modules.CS.User32.BlockInput(true);
+                            //activate origin window
+                            uplayWindow.BringToFront();
+                            uplayWindow.Activate();
 
                             //set username
                             sim.TextEntry(license.KeyAs<UserNamePasswordLicenseKeyBase>().Username);
 
+                            //disable input
+                            Win32API.Modules.CS.User32.BlockInput(true);
+                            //activate origin window
+                            uplayWindow.BringToFront();
+                            uplayWindow.Activate();
+
                             //swicth field
                             sim.KeyDown(WindowsInput.Native.VirtualKeyCode.TAB);
+
+                            //disable input
+                            Win32API.Modules.CS.User32.BlockInput(true);
+                            //activate origin window
+                            uplayWindow.BringToFront();
+                            uplayWindow.Activate();
 
                             //clear password filed
                             sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.VK_A);
 
+                            //disable input
+                            Win32API.Modules.CS.User32.BlockInput(true);
+                            //activate origin window
+                            uplayWindow.BringToFront();
+                            uplayWindow.Activate();
+
                             //send back to clear any possible typed value
                             sim.KeyDown(WindowsInput.Native.VirtualKeyCode.BACK);
+
+                            //disable input
+                            Win32API.Modules.CS.User32.BlockInput(true);
+                            //activate origin window
+                            uplayWindow.BringToFront();
+                            uplayWindow.Activate();
 
                             //set password
                             sim.TextEntry(license.KeyAs<UserNamePasswordLicenseKeyBase>().Password);
 
+                            //disable input
+                            Win32API.Modules.CS.User32.BlockInput(true);
+                            //activate origin window
+                            uplayWindow.BringToFront();
+                            uplayWindow.Activate();
+
                             //proceed with login
                             sim.KeyDown(WindowsInput.Native.VirtualKeyCode.RETURN);
+
+                            //disable input
+                            Win32API.Modules.CS.User32.BlockInput(true);
+                            //activate origin window
+                            uplayWindow.BringToFront();
+                            uplayWindow.Activate();
 
                             //set environment variable
                             Environment.SetEnvironmentVariable("LICENSEKEYUSER", license.KeyAs<UplayLicenseKey>().Username);

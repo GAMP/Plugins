@@ -49,6 +49,8 @@ namespace BaseLmPlugin
         {
             if (context.HasCompleted | context.AutoLaunch)
             {
+                var licenseKey = license.KeyAs<ProcessLicenseKey>();
+
                 #region Start Process
                 //create process for executable
                 var process = context.Executable.GetProcessForExecutable(context.Profile);
@@ -57,7 +59,7 @@ namespace BaseLmPlugin
                 string executableArgument = process.StartInfo.Arguments;
 
                 //get expanded key arguments            
-                string newArguments = Environment.ExpandEnvironmentVariables(license.Key.KeyString);
+                string newArguments = Environment.ExpandEnvironmentVariables(licenseKey.Value);
 
                 if (!String.IsNullOrWhiteSpace(executableArgument))
                 {

@@ -165,6 +165,14 @@ namespace BaseLmPlugin
                 return !String.IsNullOrWhiteSpace(this.Value);
             }
         }
+
+        public override string KeyString
+        {
+            get
+            {
+                return String.IsNullOrWhiteSpace(this.Value) ? null : this.Value.Split(System.Environment.NewLine.ToCharArray()).FirstOrDefault() ;;
+            }
+        }
     }
     #endregion
     

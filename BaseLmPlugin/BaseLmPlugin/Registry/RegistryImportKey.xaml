@@ -4,10 +4,10 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
-	x:Class="BaseLmPlugin.AddRegistryKey"
+	x:Class="BaseLmPlugin.RegistryImportKey"
 	x:Name="UserControl"
-	d:DesignWidth="230" d:DesignHeight="79">
+	d:DesignWidth="640" d:DesignHeight="480">
 	<Grid x:Name="LayoutRoot">
-		<TextBox TextWrapping="Wrap" Text="{Binding Key.Value}" VerticalAlignment="Center" Width="200"/>
+		<TextBox VerticalScrollBarVisibility="Auto" AcceptsTab="True" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Key.Value}" MinWidth="250"/>
 	</Grid>
 </UserControl>

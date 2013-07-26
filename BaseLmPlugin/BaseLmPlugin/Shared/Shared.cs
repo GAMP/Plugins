@@ -22,13 +22,14 @@ namespace BaseLmPlugin
         Steam,
         Registry,
         UserNamePassword,
+        RegistryImport,
     }
     #endregion
 
     #region Dialog Context
     public class DialogContext : PropertyChangedNotificator
     {
-        #region Fileds
+        #region FIELDS
         private UserControl content;
         private IApplicationLicenseKey key;
         private ILicenseProfile profile;
@@ -36,44 +37,50 @@ namespace BaseLmPlugin
         private Window dialog;
         #endregion
 
-        #region Properties
+        #region PROPERTIES
+
+        #region COMMANDS
+
         public SimpleCommand<object, object> AcceptCommand
         {
             get
             {
                 if (this.acceptCommand == null)
-                {
-                    this.acceptCommand = new SimpleCommand<object, object>(OnCanAcceptCommand, OnAcceptCommand);
-                }
+                    this.acceptCommand = new SimpleCommand<object, object>(OnCanAcceptCommand, OnAcceptCommand);               
                 return this.acceptCommand;
             }
         }
+
         public SimpleCommand<object, object> CancelCommand
         {
             get
             {
                 if (this.cancelCommand == null)
-                {
-                    this.cancelCommand = new SimpleCommand<object, object>(OnCanCancelCommand, OnCancelCommand);
-                }
+                    this.cancelCommand = new SimpleCommand<object, object>(OnCanCancelCommand, OnCancelCommand);              
                 return this.cancelCommand;
             }
-        }
+        } 
+
+        #endregion
+
         public UserControl Content
         {
             get { return this.content; }
             protected set { this.content = value; }
         }
+
         public IApplicationLicenseKey Key
         {
             get { return this.key; }
             protected set { this.key = value; }
         }
+
         public ILicenseProfile Profile
         {
             get { return this.profile; }
             protected set { this.profile = value; }
         }
+
         private Window Dialog
         {
             get { return this.dialog; }
@@ -83,9 +90,10 @@ namespace BaseLmPlugin
                 this.RaisePropertyChanged("Dialog");
             }
         }
+
         #endregion
 
-        #region Constructor
+        #region CONSTRUCTOR
         public DialogContext(DialogType type, IApplicationLicenseKey key, ILicenseProfile profile)
         {
             this.Key = key;
@@ -105,40 +113,51 @@ namespace BaseLmPlugin
                 case DialogType.Registry:
                     this.Content = new AddRegistryKey();
                     break;
+                case DialogType.RegistryImport:
+                    this.Content = new RegistryImportKey();
+                    break;
                 default: break;
             }
         }
         #endregion
 
-        #region Functions
+        #region FUNCTIONS
+
         public bool Display(Window owner)
         {
             this.Dialog = new KeyDialog();
-            this.Dialog.Owner = owner;
             this.Dialog.DataContext = this;
+            this.Dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            this.Dialog.Owner = owner;          
             return (bool)this.Dialog.ShowDialog();
         }
+
         #endregion
 
-        #region Command Implementation
+        #region COMMAND IMPLEMENTATION
+
         private bool OnCanAcceptCommand(object param)
         {
             return this.Dialog != null;
         }
+
         private bool OnCanCancelCommand(object param)
         {
             return this.Dialog != null;
         }
+
         private void OnCancelCommand(object param)
         {
             this.Dialog.DialogResult = false;
             this.Dialog.Close();
         }
+
         private void OnAcceptCommand(object param)
         {
             this.Dialog.DialogResult = true;
             this.Dialog.Close();
         }
+
         #endregion
     }
     #endregion

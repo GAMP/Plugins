@@ -11,6 +11,7 @@ using GizmoShell;
 namespace BaseLmPlugin
 {
     #region Starcraft2LicenseManagerPlugin
+    [PartNotDiscoverable()]
     [Export(typeof(ILicenseManagerPlugin))]
     [PluginMetadata("Starcraft II [BETA]",
         "1.0.0.0",
