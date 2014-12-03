@@ -24,7 +24,7 @@ namespace BaseLmPlugin
         "BaseLmPlugin;BaseLmPlugin.Resources.Icons.process.png")]
     public class ProcessLicenseManager : ConfigurableLicenseManagerBase
     {
-        #region Ovverides
+        #region OVERRIDES
 
         public override IApplicationLicenseKey EditLicense(IApplicationLicenseKey key, ILicenseProfile profile, ref bool additionHandled, Window owner)
         {

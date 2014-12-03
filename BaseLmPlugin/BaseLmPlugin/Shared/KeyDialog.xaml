@@ -12,8 +12,6 @@
 	ShowInTaskbar="False" 
 	WindowStyle="None" 
 	BorderThickness="1"    
-    Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" 
-	BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" 
 	SizeToContent="WidthAndHeight"
     UseLayoutRounding="True"
     MaxWidth="350" 

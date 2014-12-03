@@ -382,7 +382,7 @@ namespace BaseLmPlugin
             if (this.Context != null)
             {
                 //remove handlers    
-                this.Context.ExecutionStateChaged -= new Client.ExecutionContextStateChangedDelegate(OnExecutionStateChaged);
+                this.Context.ExecutionStateChaged -= OnExecutionStateChaged;
             }
 
             //stop waiting in any case
@@ -394,7 +394,7 @@ namespace BaseLmPlugin
 
         #endregion
 
-        #region Ovverides
+        #region OVERRIDES
 
         public override void Install(IApplicationLicense license, IExecutionContext context, ref bool forceCreation)
         {
@@ -407,7 +407,7 @@ namespace BaseLmPlugin
 
             this.License = license;
             this.Context = context;
-            context.ExecutionStateChaged += new Client.ExecutionContextStateChangedDelegate(OnExecutionStateChaged);
+            context.ExecutionStateChaged += OnExecutionStateChaged;
 
             //set environment variable
             Environment.SetEnvironmentVariable("LICENSEKEYUSER", license.KeyAs<UserNamePasswordLicenseKeyBase>().Username);

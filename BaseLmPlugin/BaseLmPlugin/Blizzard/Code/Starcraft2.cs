@@ -60,7 +60,7 @@ namespace BaseLmPlugin
         }
         #endregion
 
-        #region Ovverides
+        #region OVERRIDES
 
         protected override UserNamePasswordLicenseKeyBase GetKeyInstance()
         {

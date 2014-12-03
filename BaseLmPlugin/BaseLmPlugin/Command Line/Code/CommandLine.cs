@@ -17,7 +17,7 @@ namespace BaseLmPlugin
         "BaseLmPlugin;BaseLmPlugin.Resources.Icons.cmd.png")]
     public class CommandLineLicenseManager : LicenseManagerBase
     {
-        #region Ovverides
+        #region OVERRIDES
 
         public override IApplicationLicenseKey EditLicense(IApplicationLicenseKey key, ILicenseProfile profile, ref bool additionHandled, Window owner)
         {

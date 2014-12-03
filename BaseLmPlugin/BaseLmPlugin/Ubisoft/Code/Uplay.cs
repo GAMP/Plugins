@@ -89,7 +89,7 @@ namespace BaseLmPlugin
                     forceCreation = true;
 
                     //atach handlers
-                    context.ExecutionStateChaged += new ExecutionContextStateChangedDelegate(OnExecutionStateChaged);
+                    context.ExecutionStateChaged += OnExecutionStateChaged;
 
                     //add process to context process list
                     context.AddProcess(uplayProcess, true);
@@ -239,9 +239,9 @@ namespace BaseLmPlugin
             return new UplayLicenseManagerSettings();
         }
 
-        protected override void OnReportTerminate(IExecutionContext context)
+        public override bool DivertExecution(IExecutionContext context)
         {
-            context.WriteMessage(String.Format("Process {0} caused uplay to exit.", this.TerminateHandle.TerminatingProcesName));
+            return false;
         }
 
         #endregion

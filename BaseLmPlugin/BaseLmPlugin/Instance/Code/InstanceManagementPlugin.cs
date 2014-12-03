@@ -18,7 +18,7 @@ namespace BaseLmPlugin
         "BaseLmPlugin;BaseLmPlugin.Resources.Icons.instance.png")]
     public class InstanceManagementPlugin : LicenseManagerBase
     {
-        #region Ovverides
+        #region OVERRIDES
 
         public override IApplicationLicenseKey GetLicense(ILicenseProfile profile, ref bool additionHandled, Window owner)
         {

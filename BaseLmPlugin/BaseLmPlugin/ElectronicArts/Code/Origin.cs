@@ -63,7 +63,13 @@ namespace BaseLmPlugin
                 //get installation directory
                 string originPath = this.GetOriginPath();
 
-                if (String.IsNullOrWhiteSpace(originPath) || !File.Exists(originPath))
+                if (String.IsNullOrWhiteSpace(originPath))
+                {
+                    context.Client.Log.AddError("Could not obtain Origin client executable path.", null, LogCategories.Configuration);
+                    return;
+                }
+
+                if(!File.Exists(originPath))
                 {
                     context.Client.Log.AddError(String.Format("Origin client executable not found at {0}.", originPath), null, LogCategories.Configuration);
                     return;
@@ -93,7 +99,7 @@ namespace BaseLmPlugin
                     {
                         document.Load(xmlStream);
                     }
-                    catch (XmlException ex)
+                    catch (XmlException)
                     {
                         //could not load
                     }
@@ -192,32 +198,46 @@ namespace BaseLmPlugin
                 }
                 #endregion
 
-                #region Initialize Process
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = originPath;
-                startInfo.WorkingDirectory = Path.GetDirectoryName(originPath);
-                startInfo.ErrorDialog = false;
-                startInfo.UseShellExecute = false;
+                string processName = Path.GetFileNameWithoutExtension(originPath);          
 
-                //start origin process
-                var originProcess = new Process() { StartInfo = startInfo };
+                #region Initialize Process
+
+                //get existing origin process
+                var originProcess = Process.GetProcessesByName(processName).Where(x => String.Compare(x.MainModule.FileName, originPath, true) == 0).FirstOrDefault();
+
+                bool processExisted = originProcess != null;
+
+                if(!processExisted)
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.FileName = originPath;
+                    startInfo.Arguments = "/NoEULA";
+                    startInfo.WorkingDirectory = Path.GetDirectoryName(originPath);
+                    startInfo.ErrorDialog = false;
+                    startInfo.UseShellExecute = false;
+
+                    //start origin process
+                    originProcess = new Process() { StartInfo = startInfo };
+                }
+     
                 originProcess.EnableRaisingEvents = true;
                 originProcess.Exited += new EventHandler(OnInternalProcessExited);
+
                 #endregion
 
                 #region Start Origin
-                if (originProcess.Start())
+                if (processExisted || originProcess.Start())
                 {
                     //mark process created
                     forceCreation = true;
 
                     //atach handlers
-                    context.ExecutionStateChaged += new ExecutionContextStateChangedDelegate(OnExecutionStateChaged);
+                    context.ExecutionStateChaged += OnExecutionStateChaged;
 
                     //add process to context process list
                     context.AddProcess(originProcess, true);
 
-                    if (CoreProcess.WaitForWindowCreated(originProcess, 10000, true))
+                    if (CoreProcess.WaitForWindowCreated(originProcess, 120000, true))
                     {
                         try
                         {
@@ -291,9 +311,9 @@ namespace BaseLmPlugin
             return new OriginLicenseManagerSettings();
         }
 
-        protected override void OnReportTerminate(IExecutionContext context)
+        public override bool DivertExecution(IExecutionContext context)
         {
-            context.WriteMessage(String.Format("Process {0} caused origin to exit.", this.TerminateHandle.TerminatingProcesName));
+            return false;
         }
 
         #endregion
@@ -306,8 +326,7 @@ namespace BaseLmPlugin
             using (var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(@"SOFTWARE\Origin\", false))
             {
                 if (key != null)
-                    originPath = key.GetValue("ClientPath").ToString();
-                
+                    originPath = key.GetValue("ClientPath").ToString();                
             }
             return originPath;
         }
@@ -333,25 +352,23 @@ namespace BaseLmPlugin
             }
         }
 
-        private bool GetFields(Image image, ref OriginInputFileds focusedField, ref OriginInputFileds checkedField)
+        private bool GetFields(Image image, out OriginInputFileds focusedField, out OriginInputFileds checkedField)
         {
+            focusedField = OriginInputFileds.None;
+            checkedField = OriginInputFileds.None;
+
             try
             {
                 #region Get UI Fields State
                 using (var tr = new ImageTraverser(image))
                 {
                     bool usernameFocused = tr[45, 165] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
-
                     bool passwordFocused = tr[45, 227] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
-
                     bool keepPasswordFocused = tr[45, 340] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
                     bool keepPasswordChecked = tr[50, 350] == ColorTranslator.FromHtml("#FF9900").ToArgb();
-
                     bool invisibleFocused = tr[45, 367] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
                     bool invisibleChecked = tr[50, 378] == ColorTranslator.FromHtml("#FF9900").ToArgb();
-
                     bool forgotPasswordFocused = tr[200,271] == ColorTranslator.FromHtml("#000000").ToArgb();
-
                     bool createAccountFocused = tr[142,447] == ColorTranslator.FromHtml("#000000").ToArgb();
 
                     if (passwordFocused) { focusedField = OriginInputFileds.Password; }
@@ -402,7 +419,7 @@ namespace BaseLmPlugin
                     //grab snapshot
                     var image =aero_on? Imaging.CaptureScreenRegion(originProcess.MainWindowHandle) : Imaging.CaptureWindowImage(originProcess.MainWindowHandle);
 
-                    if (this.GetFields(image, ref focusedField, ref checkedField))
+                    if (this.GetFields(image, out focusedField, out checkedField))
                     {
                         if (focusedField == field)
                             return true;

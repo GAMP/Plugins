@@ -66,26 +66,22 @@ namespace ServerPlugins
     #endregion
 
     #region ConsoleTraceListener
+    /// <summary>
+    /// Trace listener implementation that outputs Trace messages to a console window.
+    /// </summary>
     public class ConsoleTraceListener : TraceListener
     {
-        public ConsoleTraceListener():base()
+        #region CONSTRUCTOR
+        public ConsoleTraceListener()
+            : base()
         {
             ConsoleTraceListener.AllocConsole();
             Console.Beep();
             Console.WriteLine("STARTED CONSOLE OUTPUT");
-        }
+        } 
+        #endregion
 
-        public override void Write(string message)
-        {            
-            Console.Write(message);
-        }
-
-        public override void WriteLine(string message)
-        {
-            Console.WriteLine(message);
-        }
-
-        #region Native
+        #region NATIVE
 
         #region AllocConsole
         [SuppressUnmanagedCodeSecurity()]
@@ -103,12 +99,25 @@ namespace ServerPlugins
 
         #endregion
 
+        #region OVERRIDES
+       
+        public override void Write(string message)
+        {
+            Console.Write(message);
+        }
+
+        public override void WriteLine(string message)
+        {
+            Console.WriteLine(message);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                ConsoleTraceListener.FreeConsole();            
-        }
+                ConsoleTraceListener.FreeConsole();
+        } 
 
+        #endregion
     } 
     #endregion
 }

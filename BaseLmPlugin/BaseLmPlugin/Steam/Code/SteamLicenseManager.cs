@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
 using System.Threading;
+using System.Windows.Controls;
 
 namespace BaseLmPlugin
 {
@@ -22,45 +23,32 @@ namespace BaseLmPlugin
         "1.0.0.0",
         "Manages license keys by launching Steam with login parameters.",
         "BaseLmPlugin;BaseLmPlugin.Resources.Icons.steam.png")]
-    public class SteamLicenseManager : ConfigurableLicenseManagerBase
+    public class SteamLicenseManager : ConfigurableLicenseManagerBase , IExecutionDivertPlugin
     {
-        #region Fileds
+        #region FIELDS
         private TerminateWaitHandle terminateWaitHandle = new TerminateWaitHandle(false);
+        private int diversionCount = 0;
         #endregion
 
-        #region Properties
+        #region PROPERTIES
         protected TerminateWaitHandle TerminateHandle
         {
             get { return this.terminateWaitHandle; }
         }
         #endregion
 
-        #region Ovverides
+        #region OVERRIDES
 
         public override IApplicationLicenseKey EditLicense(IApplicationLicenseKey key, ILicenseProfile profile, ref bool additionHandled, Window owner)
         {
             var context = new DialogContext(DialogType.Steam, key, profile);
-            if (context.Display(owner))
-            {
-                return context.Key;
-            }
-            else
-            {
-                return null;
-            }
+            return context.Display(owner) ? context.Key : null;
         }
 
         public override IApplicationLicenseKey GetLicense(ILicenseProfile profile, ref bool additionHandled, Window owner)
         {
             var context = new DialogContext(DialogType.Steam, new SteamLicenseKey(), profile);
-            if (context.Display(owner))
-            {
-                return context.Key;
-            }
-            else
-            {
-                return null;
-            }
+            return context.Display(owner) ? context.Key : null;
         }
 
         public override void Install(IApplicationLicense license, IExecutionContext context, ref bool forceCreation)
@@ -110,7 +98,15 @@ namespace BaseLmPlugin
                 #endregion
 
                 #region Start steam process
-                context.ExecutionStateChaged += new ExecutionContextStateChangedDelegate(OnExecutionStateChaged);
+                context.ExecutionStateChaged += OnExecutionStateChaged;
+
+                //set environment variables
+                if (!String.IsNullOrWhiteSpace(key.Username))
+                    Environment.SetEnvironmentVariable("LICENSEKEYUSER", key.Username);
+
+                if (!String.IsNullOrWhiteSpace(key.AccountId))
+                    Environment.SetEnvironmentVariable("LICENSEKEYUSERID", key.AccountId);
+
                 if (streamProcess.Start())
                 {
                     //executables process creation should not be forced
@@ -118,18 +114,12 @@ namespace BaseLmPlugin
 
                     //add process to context
                     context.AddProcess(streamProcess, true);
-
-                    //set environment variables
-                    if (!String.IsNullOrWhiteSpace(key.Username))
-                        Environment.SetEnvironmentVariable("LICENSEKEYUSER", key.Username);
-
-                    if (!String.IsNullOrWhiteSpace(key.AccountId))
-                        Environment.SetEnvironmentVariable("LICENSEKEYUSERID", key.AccountId);
                 }
                 else
                 {
                     throw new Exception("Steam process was not created.");
                 }
+
                 #endregion
             }       
         }
@@ -149,7 +139,7 @@ namespace BaseLmPlugin
             }
         }
 
-        public override System.Windows.Controls.UserControl GetConfigurationUI()
+        public override UserControl GetConfigurationUI()
         {
             return new SteamSettingsView();
         }
@@ -161,11 +151,10 @@ namespace BaseLmPlugin
 
         #endregion
 
-        #region Virtual
+        #region VIRTUAL
 
         protected virtual void OnInternalProcessExited(object sender, EventArgs e)
         {
-
         }
 
         protected virtual void OnExecutionStateChaged(object sender, ExecutionContextStateArgs e)
@@ -256,7 +245,7 @@ namespace BaseLmPlugin
             #region Finished
             else if (e.NewState == ContextExecutionState.Finalized | e.NewState == ContextExecutionState.Destroyed | e.NewState == ContextExecutionState.Released)
             {
-                context.ExecutionStateChaged -= new ExecutionContextStateChangedDelegate(OnExecutionStateChaged);
+                context.ExecutionStateChaged -= OnExecutionStateChaged;
             }
             #endregion
         }
@@ -282,7 +271,8 @@ namespace BaseLmPlugin
 
         protected virtual void OnReportTerminate(IExecutionContext context)
         {
-            context.WriteMessage(String.Format("Process {0} caused steam to exit.", this.TerminateHandle.TerminatingProcesName));
+            string pluginName = this.GetType().Name;
+            context.WriteMessage(String.Format("Process {0} caused {1} plugin to terminate execution context.", this.TerminateHandle.TerminatingProcesName ,pluginName));
         }
 
         protected virtual void WaitForTerminateCallback(IAsyncResult result)
@@ -298,7 +288,13 @@ namespace BaseLmPlugin
             }
         }
 
-        #endregion
+        public virtual bool DivertExecution(IExecutionContext context)
+        {
+            diversionCount++;
+            return diversionCount <= 1;
+        }
+
+        #endregion        
     }
     #endregion
 
@@ -313,6 +309,7 @@ namespace BaseLmPlugin
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Gets or sets if context should be terminated once a child exists.
         /// </summary>
@@ -325,6 +322,7 @@ namespace BaseLmPlugin
                 this.RaisePropertyChanged("TerminateOnChildExit");
             }
         }
+        
         /// <summary>
         /// List of processes seperated by that should trigger context termination once exited.
         /// <remarks>Full name or process name can be specified. Process names should be seperated by ; mark.</remarks>
@@ -338,6 +336,7 @@ namespace BaseLmPlugin
                 this.RaisePropertyChanged("ChildIgnoreList");
             }
         }
+        
         /// <summary>
         /// Ammount of time to wait before terminating context.
         /// </summary>
@@ -350,9 +349,11 @@ namespace BaseLmPlugin
                 this.RaisePropertyChanged("ChildWaitTimeout");
             }
         }
+        
         #endregion
 
         #region Functions
+
         public bool IsMatch(string fileName)
         {
             if (!String.IsNullOrWhiteSpace(this.ChildIgnoreList))

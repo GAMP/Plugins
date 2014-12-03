@@ -24,7 +24,7 @@ namespace BaseLmPlugin
         "BaseLmPlugin;BaseLmPlugin.Resources.Icons.registry.png")]
     public class RegistryLicenseManager : ConfigurableLicenseManagerBase
     {
-        #region Ovverides
+        #region OVERRIDES
         
         public override IApplicationLicenseKey GetLicense(ILicenseProfile profile, ref bool additionHandled, Window owner)
         {

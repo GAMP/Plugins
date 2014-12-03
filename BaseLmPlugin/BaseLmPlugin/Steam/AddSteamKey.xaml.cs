@@ -25,7 +25,11 @@ namespace BaseLmPlugin
 
         public AddSteamKey(bool showIdField):this()
         {
-            this.idField.Visibility = System.Windows.Visibility.Collapsed;
+            if(!showIdField)
+            {
+                this.idFieldDock.Visibility = System.Windows.Visibility.Collapsed;
+                BindingOperations.ClearBinding(this.idField, TextBox.TextProperty);
+            }           
         }
 	}
 }

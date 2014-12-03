@@ -14,15 +14,15 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <DockPanel VerticalAlignment="Bottom">
-            <TextBlock TextWrapping="Wrap" Text="Username" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80" Foreground="White"/>
+            <TextBlock TextWrapping="Wrap" Text="Username" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80"/>
             <TextBox TextWrapping="Wrap" Margin="2" Text="{Binding Username}" MaxLength="255"/>
         </DockPanel>
-        <DockPanel x:Name="idField" VerticalAlignment="Bottom" Grid.Row="1">
-            <TextBlock TextWrapping="Wrap" Text="Account ID" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80" Foreground="White"/>
-            <TextBox TextWrapping="Wrap" Margin="2" Text="{Binding AccountId}" MaxLength="255"/>
+        <DockPanel x:Name="idFieldDock" VerticalAlignment="Bottom" Grid.Row="1">
+            <TextBlock TextWrapping="Wrap" Text="Account ID" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80"/>
+            <TextBox x:Name="idField" TextWrapping="Wrap" Margin="2" Text="{Binding AccountId}" MaxLength="255"/>
         </DockPanel>
         <DockPanel VerticalAlignment="Bottom" Grid.Row="2">
-            <TextBlock TextWrapping="Wrap" Text="Password" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80" Foreground="White"/>
+            <TextBlock TextWrapping="Wrap" Text="Password" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Width="80"/>
             <TextBox TextWrapping="Wrap" Margin="2" Text="{Binding Password}" MaxLength="255"/>
         </DockPanel>
     </Grid>
