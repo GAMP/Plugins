@@ -69,17 +69,30 @@ namespace BaseLmPlugin
 
                 #endregion
 
-                #region Initialize Process
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = uplayPath;
-                startInfo.WorkingDirectory = Path.GetDirectoryName(uplayPath);
-                startInfo.ErrorDialog = false;
-                startInfo.UseShellExecute = false;
+                string processName = Path.GetFileNameWithoutExtension(uplayPath); 
 
-                //start origin process
-                var uplayProcess = new Process() { StartInfo = startInfo };
+                #region Initialize Process
+
+                //get existing uplay process
+                var uplayProcess = Process.GetProcessesByName(processName).Where(x => String.Compare(x.MainModule.FileName, uplayPath, true) == 0).FirstOrDefault();
+
+                bool processExisted = uplayProcess != null;
+
+                if(!processExisted)
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.FileName = uplayPath;
+                    startInfo.WorkingDirectory = Path.GetDirectoryName(uplayPath);
+                    startInfo.ErrorDialog = false;
+                    startInfo.UseShellExecute = false;
+
+                    //create uplay process
+                    uplayProcess = new Process() { StartInfo = startInfo };
+                }
+           
                 uplayProcess.EnableRaisingEvents = true;
                 uplayProcess.Exited += new EventHandler(OnInternalProcessExited);
+
                 #endregion
 
                 #region Start Uplay
@@ -94,7 +107,7 @@ namespace BaseLmPlugin
                     //add process to context process list
                     context.AddProcess(uplayProcess, true);
 
-                    if (CoreProcess.WaitForWindowCreated(uplayProcess, 30000, true))
+                    if (CoreProcess.WaitForWindowCreated(uplayProcess, 120000, true))
                     {
                         try
                         {
@@ -103,7 +116,6 @@ namespace BaseLmPlugin
 
                             //get window
                             WindowInfo uplayWindow = new WindowInfo(uplayProcess.MainWindowHandle);
-
 
                             //activate origin window
                             uplayWindow.BringToFront();
@@ -196,6 +208,8 @@ namespace BaseLmPlugin
                             //set environment variable
                             Environment.SetEnvironmentVariable("LICENSEKEYUSER", license.KeyAs<UplayLicenseKey>().Username);
 
+                            //delay installation process
+                            System.Threading.Thread.Sleep(5000);
                         }
                         catch
                         {

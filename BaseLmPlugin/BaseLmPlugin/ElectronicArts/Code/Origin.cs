@@ -21,10 +21,7 @@ namespace BaseLmPlugin
 {
     #region OriginLicenseManager
     [Export(typeof(ILicenseManagerPlugin))]
-    [PluginMetadata("EA Origin",
-        "1.0.0.0",
-        "Manages license keys by sending credentials input to application window.",
-        "BaseLmPlugin;BaseLmPlugin.Resources.Icons.origin.png")]
+    [PluginMetadata("EA Origin","1.0.0.0","Manages license keys by sending credentials input to application window.","BaseLmPlugin;BaseLmPlugin.Resources.Icons.origin.png")]
     public class OriginLicenseManager : SteamLicenseManager
     {
         #region Interface
@@ -216,7 +213,7 @@ namespace BaseLmPlugin
                     startInfo.ErrorDialog = false;
                     startInfo.UseShellExecute = false;
 
-                    //start origin process
+                    //create origin process
                     originProcess = new Process() { StartInfo = startInfo };
                 }
      
@@ -241,6 +238,8 @@ namespace BaseLmPlugin
                     {
                         try
                         {
+                            IntPtr mainWindow = originProcess.MainWindowHandle;
+
                             //create input simulator
                             WindowsInput.KeyboardSimulator sim = new WindowsInput.KeyboardSimulator();
 
@@ -274,6 +273,10 @@ namespace BaseLmPlugin
                             //set environment variable
                             Environment.SetEnvironmentVariable("LICENSEKEYUSER", license.KeyAs<OriginLicenseKey>().Username);
 
+                            //wait for window to be destroyed
+                            if (CoreProcess.WaitForWindowDestroyed(mainWindow, 120000))
+                                //delay installation process
+                                System.Threading.Thread.Sleep(3000);
                         }
                         catch
                         {

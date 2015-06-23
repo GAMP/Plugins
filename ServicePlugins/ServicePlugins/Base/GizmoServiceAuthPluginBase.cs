@@ -18,6 +18,7 @@ namespace ServicePlugins
     public abstract class GizmoServiceAuthPluginBase : GizmoServicePluginBase, IGizmoServiceAuthenticationPlugin
     {
         #region CONSTRUCTOR
+
         public virtual AuthResult Authenticate(IDictionary<string, object> authHeaders, IMessageDispatcher dispatcher)
         {
             throw new NotImplementedException();
@@ -32,6 +33,7 @@ namespace ServicePlugins
         {
             throw new NotImplementedException();
         }
+        
         #endregion
     }
     #endregion

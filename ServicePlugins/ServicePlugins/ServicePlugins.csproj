@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\GizmoService\GizmoService\bin\Debug\Plugins\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -41,9 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicAuthPlugin.cs" />
-    <Compile Include="GizmoServiceAuthPluginBase.cs" />
-    <Compile Include="GizmoServiceHookPluginBase.cs" />
-    <Compile Include="GizmoServicePluginBase.cs" />
+    <Compile Include="Base\GizmoServiceAuthPluginBase.cs" />
+    <Compile Include="Base\GizmoServiceHookPluginBase.cs" />
+    <Compile Include="Base\GizmoServicePluginBase.cs" />
     <Compile Include="Hooks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -51,19 +51,24 @@
     <ProjectReference Include="..\..\..\DataInterfaces\DataInterfaces\DataInterfaces.csproj">
       <Project>{d1699cd0-ec5d-4bac-af4e-a145e417733b}</Project>
       <Name>DataInterfaces</Name>
-      <Private>True</Private>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\GizmoDALV2\GizmoDALEntities\GizmoDALEntities.csproj">
       <Project>{57f84383-4d82-4841-8406-cfea054a7428}</Project>
       <Name>GizmoDALEntities</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\TempLib\TempLib\TempLib.csproj">
       <Project>{d112b6e7-f58f-405f-82ba-236508cb99d0}</Project>
       <Name>TempLib</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)$(TargetFileName)" "D:\My Documents\Visual Studio 2012\Projects\Gizmo\GizmoService\GizmoService\bin\Debug\Plugins\$(TargetFileName)" /y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

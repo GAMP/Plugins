@@ -24,8 +24,6 @@ namespace ServicePlugins
             //NOTE THAT HOST NUMBER AND HOST ID IS DIFFERENT THINGS
             //HOST ID IS DATABASE ID AND HOST NUMBER IS THE ACTUALL NUMBER ASSIGNED TO THE HOST
             
-            //IHostEntry host = this.Service.HostGet(dispatcher);
-           
             //YOU CAN ALSO GET OTHER HOST INFORMATION LIKE MAC ADDRESS IF HOST IS REGISTERED ETC
             if (result.Result == LoginResult.Sucess)
             {
@@ -35,6 +33,11 @@ namespace ServicePlugins
             {
                 //AUTH FAILED
             }  
+        }
+
+        public override void OnImportsSatisfied()
+        {
+            base.OnImportsSatisfied();
         }
     }
 }

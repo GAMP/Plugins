@@ -15,27 +15,28 @@ namespace ServicePlugins
     #region UserStateHook
     /// <summary>
     /// Simple user state hook.
-    /// <remarks>Can be used to external loging etc.</remarks>
+    /// <remarks>
+    /// Can be used to external logging etc.
+    /// </remarks>
     /// </summary>
     public class UserStateHook : GizmoServiceHookPluginBase
     {
         public override void OnImportsSatisfied()
         {
         }
-    } 
+    }
     #endregion
 
     #region HostEventHook
     public class HostEventHook : GizmoServiceHookPluginBase
     {
         public override void OnImportsSatisfied()
-        {            
+        {
         }
-    } 
+    }
     #endregion
 
     #region ServiceTraceHook
-    [PartNotDiscoverable()]
     public class ServiceConsoleTraceHook : GizmoServiceHookPluginBase
     {
         #region FIELDS
@@ -49,7 +50,7 @@ namespace ServicePlugins
             {
                 Trace.Listeners.Add(listener);
             }
-        } 
+        }
         #endregion
 
         #region CONSOLETRACELISTENER
@@ -64,7 +65,7 @@ namespace ServicePlugins
             {
                 ConsoleTraceListener.AllocConsole();
                 Console.Beep();
-                Console.WriteLine("STARTED CONSOLE OUTPUT");
+                Console.WriteLine(String.Format("{0} {1}", this.GetType().Name, "STARTED CONSOLE OUTPUT"));
             }
             #endregion
 
@@ -90,7 +91,7 @@ namespace ServicePlugins
 
             public override void Write(string message)
             {
-                if(Environment.UserInteractive)
+                if (Environment.UserInteractive)
                     Console.Write(message);
             }
 
@@ -109,6 +110,6 @@ namespace ServicePlugins
             #endregion
         }
         #endregion
-    } 
+    }
     #endregion
 }

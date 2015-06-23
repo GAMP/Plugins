@@ -1,5 +1,4 @@
-﻿using Accessibility;
-using Client;
+﻿using Client;
 using GizmoShell;
 using IntegrationLib;
 using System;
@@ -203,14 +202,13 @@ namespace BaseLmPlugin
                         //block user input
                         User32.BlockInput(true);
 
-                        var ac = Win32API.Modules.Oleacc.GetAccessibleObjectFromHandle(window);
-
                         KeyboardSimulator sim = new KeyboardSimulator();
+                        MouseSimulator msim = new MouseSimulator();
 
-                        var child = GetChildByIndex(ac, userNameIndexes);
-
-                        if (child != null)
-                            child.accDoDefaultAction(0);
+                        var x = info.Location.X + info.Width - 150;
+                        var y = info.Location.Y + 150;
+                        System.Windows.Forms.Cursor.Position = new System.Drawing.Point(x, y);
+                        msim.LeftButtonClick();
 
                         //clear username filed
                         sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.VK_A);
@@ -221,12 +219,16 @@ namespace BaseLmPlugin
                         //set username
                         sim.TextEntry(userName);
 
-                        child = GetChildByIndex(ac, passwordIndexes);
+                        //reactivate
+                        info.BringToFront();
+                        info.Activate();
 
-                        if (child != null)
-                            child.accDoDefaultAction(0);
+                        x = info.Location.X + info.Width - 150;
+                        y = info.Location.Y + 200;
+                        System.Windows.Forms.Cursor.Position = new System.Drawing.Point(x, y);
 
-
+                        msim.LeftButtonClick();
+    
                         //clear password filed
                         sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.VK_A);
 
@@ -236,25 +238,13 @@ namespace BaseLmPlugin
                         //set password
                         sim.TextEntry(passWord);
 
-                        child = GetChildByIndex(ac, keepLoggedInIndexes);
-
-                        if (child != null)
-                            child.accDoDefaultAction(0);
-
-
-                        child = GetChildByIndex(ac, loginIndexes);
-
-
-                        if (child != null)
-                            child.accDoDefaultAction(0);
-
                         //proceed with login
                         sim.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
                     }
-                    catch
+                    catch(Exception ex)
                     {
-
-                    }
+                        Console.WriteLine("License installation failed {0}", ex);
+                    }  
                     finally
                     {
                         //unblock user input
@@ -327,29 +317,6 @@ namespace BaseLmPlugin
             }
 
             return stringValue;
-        }
-
-        private IAccessible GetChildByIndex(IAccessible ac, List<int> indexes)
-        {
-            IAccessible lastChild = null;
-            IAccessible[] childList = Win32API.Modules.Oleacc.GetAccessibleChildren(ac);
-
-            int currentIndex = 0;
-            int lastIndex = indexes.Count - 1;
-
-            foreach (var index in indexes)
-            {
-                if (currentIndex >= lastIndex)
-                {
-                    lastChild = childList[index];
-                    break;
-                }
-
-                childList = Win32API.Modules.Oleacc.GetAccessibleChildren(childList[index]);
-                currentIndex++;
-            }
-
-            return lastChild;
         }
     }
 

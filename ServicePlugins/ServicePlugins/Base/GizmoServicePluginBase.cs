@@ -50,7 +50,7 @@ namespace ServicePlugins
         protected IGizmoService Service
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace ServicePlugins
         protected IDBRepository RepositoryService
         {
             get;
-            set;
+            private set;
         }
 
         #endregion
