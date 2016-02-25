@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ClientPlugins</RootNamespace>
     <AssemblyName>ClientPlugins</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -55,6 +55,10 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)$(TargetFileName)" "D:\My Documents\Visual Studio 2015\Projects\Gizmo\GizmoService\GizmoService\bin\Debug\Plugins\$(TargetFileName)" /y
+copy "$(TargetDir)$(TargetFileName)" "D:\My Documents\Visual Studio 2015\Projects\Gizmo\Server_Service\Server_Service\bin\Debug\Plugins\$(TargetFileName)" /y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

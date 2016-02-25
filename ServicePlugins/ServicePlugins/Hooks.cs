@@ -46,10 +46,10 @@ namespace ServicePlugins
         #region OVERRIDES
         public override void OnImportsSatisfied()
         {
+            //ONLY ADD LISTENER IF ENVIRONEMNT IS INTERACTIVE
             if (Environment.UserInteractive)
-            {
                 Trace.Listeners.Add(listener);
-            }
+           
         }
         #endregion
 

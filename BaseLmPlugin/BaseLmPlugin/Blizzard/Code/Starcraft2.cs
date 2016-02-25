@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using IntegrationLib;
 using System.ComponentModel.Composition;
 using System.Drawing;
-using Win32API.Modules.CS;
 using GizmoShell;
+using Win32API.Modules;
 
 namespace BaseLmPlugin
 {

@@ -1,17 +1,15 @@
 ﻿using IntegrationLib;
 using NetLib;
+using ServerService;
 using SharedLib.Dispatcher;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
 
 namespace ServerPlugins
 {
     [PluginMetadata("Generic authentication plugin","0.0.0.0")]
     [Export()]
-    public class BasicAuthPlugin : AuthPluginBase
+    public class BasicAuthPlugin : ServiceAuthPluginBase
     {
         public override AuthResult Authenticate(IDictionary<string, object> authHeaders, IMessageDispatcher dispatcher)
         {

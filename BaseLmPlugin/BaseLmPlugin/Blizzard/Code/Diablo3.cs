@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using IntegrationLib;
 using System.ComponentModel.Composition;
-using System.Windows;
 using System.Drawing;
 using System.Diagnostics;
-using Win32API.Modules.CS;
 using Client;
-using CoreLib.Diagnostics;
 using GizmoShell;
 using SharedLib;
+using Win32API.Modules;
 
 namespace BaseLmPlugin
 {
@@ -82,7 +79,7 @@ namespace BaseLmPlugin
         }
 
         /// <summary>
-        /// Gets or sets the ammount of time to wait after user input has been send to application window.
+        /// Gets or sets the amount of time to wait after user input has been send to application window.
         /// </summary>
         protected int SendWaitTime
         {
@@ -91,7 +88,7 @@ namespace BaseLmPlugin
         }
 
         /// <summary>
-        /// Ammount of time to wait for main window.
+        /// Amount of time to wait for main window.
         /// </summary>
         protected int WindowWaitTime
         {
@@ -230,7 +227,7 @@ namespace BaseLmPlugin
                         //get app window snapshot
                         Image applicationImage = CoreLib.Imaging.Imaging.CaptureWindowImage(desiredWindow);
 
-                        //ammount of matched pixels
+                        //amount of matched pixels
                         int pixelsMatched = 0;
 
                         //create new pixels-map

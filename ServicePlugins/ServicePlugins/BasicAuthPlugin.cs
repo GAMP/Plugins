@@ -1,5 +1,6 @@
 ﻿using IntegrationLib;
 using NetLib;
+using ServerService;
 using SharedLib.Dispatcher;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,6 @@ using System.Text;
 
 namespace ServicePlugins
 {
-    [PluginMetadata("Generic GizmoService authentication plugin","1.0.0.0")]
     public class BasicAuthPlugin : GizmoServiceAuthPluginBase
     {
         public override AuthResult Authenticate(IDictionary<string, object> authHeaders, IMessageDispatcher dispatcher)

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ServicePlugins</RootNamespace>
     <AssemblyName>ServicePlugins</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,10 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicAuthPlugin.cs" />
-    <Compile Include="Base\GizmoServiceAuthPluginBase.cs" />
-    <Compile Include="Base\GizmoServiceHookPluginBase.cs" />
-    <Compile Include="Base\GizmoServicePluginBase.cs" />
     <Compile Include="Hooks.cs" />
+    <Compile Include="ModulePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,16 +57,11 @@
       <Name>GizmoDALEntities</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\TempLib\TempLib\TempLib.csproj">
-      <Project>{d112b6e7-f58f-405f-82ba-236508cb99d0}</Project>
-      <Name>TempLib</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)$(TargetFileName)" "D:\My Documents\Visual Studio 2012\Projects\Gizmo\GizmoService\GizmoService\bin\Debug\Plugins\$(TargetFileName)" /y</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)$(TargetFileName)" "D:\My Documents\Visual Studio 2015\Projects\Gizmo\GizmoService\GizmoService\bin\Debug\Plugins\$(TargetFileName)" /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

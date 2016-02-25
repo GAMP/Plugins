@@ -7,14 +7,11 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Win32API.Modules.CS;
+using Win32API.Modules;
 using WindowsInput;
 
 namespace BaseLmPlugin

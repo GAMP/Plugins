@@ -1,15 +1,18 @@
-﻿using SharedLib;
+﻿using Client;
+using SharedLib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace IntegrationLib
 {
-    [Export(typeof(IClientHook))]
+    [Export(typeof(IClientHookPlugin))]
     public class SampleHook : ClientHookPluginBase
     {        
         public override void OnImportsSatisfied()
@@ -20,25 +23,44 @@ namespace IntegrationLib
             this.Client.LoginStateChange += OnLoginStateChange;
             this.Client.ApplicationRated += OnApplicationRated;
             this.Client.UserProfileChange += OnUserProfileChange;
+            this.Client.ExecutionContextStateChage += OnClientExecutionContextStateChage;
 
             // One important note for this method is that in case importing party allows recomposition it might be called each time the
             // part is imported so that should be handled correctly.
             // Currently Gizmo client will not recompose the imports so this will be called just once.
         }
 
-        private void OnUserProfileChange(object sender, Client.UserProfileChangeArgs e)
+        private void OnClientExecutionContextStateChage(object sender, ExecutionContextStateArgs e)
+        {
+            switch(e.NewState)
+            {
+                case ContextExecutionState.Failed:
+                    var exception = e.StateObject as Exception;
+                    if(exception!=null)
+                    {
+                        MessageBox.Show(exception.ToString(),"Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            Trace.WriteLine(String.Format("New state - {0} Old state - {1}", e.NewState, e.OldState));
+        }
+
+        private void OnUserProfileChange(object sender, UserProfileChangeArgs e)
         {
             //Here you can handle the user profile change.
         }
 
-        private void OnApplicationRated(object sender, Client.ApplicationRateEventArgs e)
+        private void OnApplicationRated(object sender, ApplicationRateEventArgs e)
         {
             var notifyString = String.Format("User {0} rated application {1} with {2}", this.Client.CurrentUser.UserName, e.ApplicationId, e.OverallRating.Value);
 
             this.Client.NotifyUser(notifyString, "Rated", true);
         }
 
-        private void OnLoginStateChange(object sender, Client.UserEventArgs e)
+        private void OnLoginStateChange(object sender, UserEventArgs e)
         {            
             // Here you get login state change event arguments.
             switch(e.State)

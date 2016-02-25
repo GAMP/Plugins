@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Data;
 using SharedLib;
 using System.Windows.Controls;
 using System.Windows;
 using IntegrationLib;
-using SkinInterfaces.Code;
-using System.Runtime.InteropServices;
 using System.Threading;
+using SkinInterfaces;
 
 namespace BaseLmPlugin
 {

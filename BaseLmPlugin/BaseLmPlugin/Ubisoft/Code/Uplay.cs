@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.ComponentModel.Composition;
 using IntegrationLib;
 using Microsoft.Win32;
@@ -11,9 +9,8 @@ using System.Windows;
 using SharedLib;
 using GizmoShell;
 using CoreLib.Diagnostics;
-using System.Drawing;
-using CoreLib.Imaging;
 using System.Diagnostics;
+using Win32API.Modules;
 
 namespace BaseLmPlugin
 {
@@ -112,7 +109,7 @@ namespace BaseLmPlugin
                         try
                         {
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
 
                             //get window
                             WindowInfo uplayWindow = new WindowInfo(uplayProcess.MainWindowHandle);
@@ -125,7 +122,7 @@ namespace BaseLmPlugin
                             System.Threading.Thread.Sleep(5000);
 
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
                             //activate origin window
                             uplayWindow.BringToFront();
                             uplayWindow.Activate();
@@ -133,11 +130,14 @@ namespace BaseLmPlugin
                             //create input simulator
                             WindowsInput.KeyboardSimulator sim = new WindowsInput.KeyboardSimulator();
 
+                            //send tab
+                            sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.TAB);
+
                             //clear username filed
                             sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.VK_A);
 
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
                             //activate origin window
                             uplayWindow.BringToFront();
                             uplayWindow.Activate();
@@ -146,7 +146,7 @@ namespace BaseLmPlugin
                             sim.KeyDown(WindowsInput.Native.VirtualKeyCode.BACK);
 
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
                             //activate origin window
                             uplayWindow.BringToFront();
                             uplayWindow.Activate();
@@ -155,7 +155,7 @@ namespace BaseLmPlugin
                             sim.TextEntry(license.KeyAs<UserNamePasswordLicenseKeyBase>().Username);
 
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
                             //activate origin window
                             uplayWindow.BringToFront();
                             uplayWindow.Activate();
@@ -164,7 +164,7 @@ namespace BaseLmPlugin
                             sim.KeyDown(WindowsInput.Native.VirtualKeyCode.TAB);
 
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
                             //activate origin window
                             uplayWindow.BringToFront();
                             uplayWindow.Activate();
@@ -173,7 +173,7 @@ namespace BaseLmPlugin
                             sim.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.LCONTROL, WindowsInput.Native.VirtualKeyCode.VK_A);
 
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
                             //activate origin window
                             uplayWindow.BringToFront();
                             uplayWindow.Activate();
@@ -182,7 +182,7 @@ namespace BaseLmPlugin
                             sim.KeyDown(WindowsInput.Native.VirtualKeyCode.BACK);
 
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
                             //activate origin window
                             uplayWindow.BringToFront();
                             uplayWindow.Activate();
@@ -191,7 +191,7 @@ namespace BaseLmPlugin
                             sim.TextEntry(license.KeyAs<UserNamePasswordLicenseKeyBase>().Password);
 
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
                             //activate origin window
                             uplayWindow.BringToFront();
                             uplayWindow.Activate();
@@ -200,7 +200,8 @@ namespace BaseLmPlugin
                             sim.KeyDown(WindowsInput.Native.VirtualKeyCode.RETURN);
 
                             //disable input
-                            Win32API.Modules.CS.User32.BlockInput(true);
+                            User32.BlockInput(true);
+
                             //activate origin window
                             uplayWindow.BringToFront();
                             uplayWindow.Activate();
@@ -218,7 +219,7 @@ namespace BaseLmPlugin
                         finally
                         {
                             //enable input
-                            Win32API.Modules.CS.User32.BlockInput(false);
+                            User32.BlockInput(false);
                         }
 
                     }

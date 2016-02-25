@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using IntegrationLib;
 using System.ComponentModel.Composition;
 using SharedLib;
@@ -9,13 +8,13 @@ using System.IO;
 using Client;
 using System.Windows;
 using System.Diagnostics;
-using System.Threading;
 using CoreLib.Imaging;
 using System.Drawing;
 using Microsoft.Win32;
 using CoreLib.Diagnostics;
 using GizmoShell;
 using System.Xml;
+using Win32API.Modules;
 
 namespace BaseLmPlugin
 {
@@ -365,14 +364,14 @@ namespace BaseLmPlugin
                 #region Get UI Fields State
                 using (var tr = new ImageTraverser(image))
                 {
-                    bool usernameFocused = tr[45, 165] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
-                    bool passwordFocused = tr[45, 227] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
-                    bool keepPasswordFocused = tr[45, 340] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
-                    bool keepPasswordChecked = tr[50, 350] == ColorTranslator.FromHtml("#FF9900").ToArgb();
+                    bool usernameFocused = tr[45, 187] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
+                    bool passwordFocused = tr[45, 252] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
+                    bool keepPasswordFocused = tr[45, 370] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
+                    bool keepPasswordChecked = tr[54, 366] == ColorTranslator.FromHtml("#FF9900").ToArgb();
                     bool invisibleFocused = tr[45, 367] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
-                    bool invisibleChecked = tr[50, 378] == ColorTranslator.FromHtml("#FF9900").ToArgb();
-                    bool forgotPasswordFocused = tr[200,271] == ColorTranslator.FromHtml("#000000").ToArgb();
-                    bool createAccountFocused = tr[142,447] == ColorTranslator.FromHtml("#000000").ToArgb();
+                    bool invisibleChecked = tr[54, 394] == ColorTranslator.FromHtml("#FF9900").ToArgb();
+                    bool forgotPasswordFocused = tr[200, 271] == ColorTranslator.FromHtml("#000000").ToArgb();
+                    bool createAccountFocused = tr[142, 447] == ColorTranslator.FromHtml("#000000").ToArgb();
 
                     if (passwordFocused) { focusedField = OriginInputFileds.Password; }
                     if (usernameFocused) { focusedField = OriginInputFileds.Username; }
@@ -403,7 +402,7 @@ namespace BaseLmPlugin
             {
                 try
                 {
-                    Win32API.Modules.CS.User32.BlockInput(true);                    
+                    User32.BlockInput(true);                    
 
                     //reactivate window
                     window.BringToFront();
@@ -440,7 +439,7 @@ namespace BaseLmPlugin
                 }
                 finally
                 {
-                    Win32API.Modules.CS.User32.BlockInput(false);
+                    User32.BlockInput(false);
                 }
             }
             return false;

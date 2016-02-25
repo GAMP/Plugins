@@ -252,7 +252,7 @@ namespace BaseLmPlugin
 
         protected virtual void WaitForTerminateWorker(IExecutionContext context)
         {
-            //get ammount to wait from settings
+            //get amount to wait from settings
             int waitMiliseconds = (int)TimeSpan.FromSeconds(this.SettingsAs<SteamLicenseManagerSettings>().ChildWaitTimeout).TotalMilliseconds;
             
             //start waiting
@@ -338,7 +338,7 @@ namespace BaseLmPlugin
         }
         
         /// <summary>
-        /// Ammount of time to wait before terminating context.
+        /// Amount of time to wait before terminating context.
         /// </summary>
         public int ChildWaitTimeout
         {
