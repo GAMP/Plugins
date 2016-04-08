@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataInterfaces", "..\DataIn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseLmPlugin", "BaseLmPlugin\BaseLmPlugin\BaseLmPlugin.csproj", "{6754B84F-4D3D-49A2-A35A-B8052034FB52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerPlugins", "ManagerPlugins\ManagerPlugins.csproj", "{4C3F174E-9E1D-4B12-A5BC-855C6ECA5A5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{6754B84F-4D3D-49A2-A35A-B8052034FB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6754B84F-4D3D-49A2-A35A-B8052034FB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6754B84F-4D3D-49A2-A35A-B8052034FB52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C3F174E-9E1D-4B12-A5BC-855C6ECA5A5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C3F174E-9E1D-4B12-A5BC-855C6ECA5A5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C3F174E-9E1D-4B12-A5BC-855C6ECA5A5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C3F174E-9E1D-4B12-A5BC-855C6ECA5A5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

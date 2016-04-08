@@ -365,7 +365,7 @@ namespace BaseLmPlugin
                 using (var tr = new ImageTraverser(image))
                 {
                     bool usernameFocused = tr[45, 187] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
-                    bool passwordFocused = tr[45, 252] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
+                    bool passwordFocused = tr[45, 237] == ColorTranslator.FromHtml("#EDBD69").ToArgb();
                     bool keepPasswordFocused = tr[45, 370] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
                     bool keepPasswordChecked = tr[54, 366] == ColorTranslator.FromHtml("#FF9900").ToArgb();
                     bool invisibleFocused = tr[45, 367] == ColorTranslator.FromHtml("#EEBD67").ToArgb();
@@ -381,8 +381,6 @@ namespace BaseLmPlugin
                     if (createAccountFocused) { focusedField = OriginInputFileds.CreateAccount; }
                     if (keepPasswordChecked) { checkedField = checkedField ^ OriginInputFileds.StayConnected; }
                     if (invisibleChecked) { checkedField = checkedField ^ OriginInputFileds.Invisible; }
-
-                    tr.Dispose();
                     return true;
                 }
                 #endregion
@@ -402,7 +400,9 @@ namespace BaseLmPlugin
             {
                 try
                 {
-                    User32.BlockInput(true);                    
+#if !DEBUG
+                    User32.BlockInput(true);      
+#endif              
 
                     //reactivate window
                     window.BringToFront();
@@ -439,32 +439,34 @@ namespace BaseLmPlugin
                 }
                 finally
                 {
+#if !DEBUG
                     User32.BlockInput(false);
+#endif
                 }
             }
             return false;
         }
 
-        #endregion
+#endregion
     }
-    #endregion
+#endregion
 
-    #region OriginLicenseManagerSettings
+#region OriginLicenseManagerSettings
     [Serializable]
     public class OriginLicenseManagerSettings : SteamLicenseManagerSettings, IPluginSettings
     {
     }
-    #endregion
+#endregion
 
-    #region OriginLicenseKey
+#region OriginLicenseKey
     [Serializable()]
     public class OriginLicenseKey : UserNamePasswordLicenseKeyBase
     {
 
     }
-    #endregion
+#endregion
 
-    #region OriginInputFileds
+#region OriginInputFileds
     [Flags()]
     public enum OriginInputFileds : int
     {
@@ -477,5 +479,5 @@ namespace BaseLmPlugin
         Invisible = 32,
         CreateAccount = 64,
     }
-    #endregion
+#endregion
 }
