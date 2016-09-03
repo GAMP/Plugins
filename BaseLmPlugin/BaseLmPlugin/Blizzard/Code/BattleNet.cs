@@ -25,13 +25,16 @@ namespace BaseLmPlugin
     {
         #region Fields
 
-        private List<int> userNameIndexes = new List<int>() { 3, 0, 2, 0, 0, 0, 1, 1, 0, 3 };
-        private List<int> passwordIndexes = new List<int>() { 3, 0, 2, 0, 0, 0, 1, 1, 0, 4 };
-        private List<int> keepLoggedInIndexes = new List<int>() { 3, 0, 2, 0, 0, 0, 1, 1, 0, 5 };
-        private List<int> loginIndexes = new List<int>() { 3, 0, 2, 0, 0, 0, 1, 1, 0, 7 };
-
-        private string configPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Battle.net", "Battle.net.config");
-        private string[] processImageFileNames = new string[] { @"Battle.net Launcher", @"Battle.net", @"BlizzardError",@"Agent" };
+        private string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Battle.net", "Battle.net.config");
+        private string[] processImageFileNames = new string[] 
+        {
+            @"Battle.net Launcher",
+            @"Battle.net",
+            @"BlizzardError",
+            @"Agent",
+            @"Battle.net Helper",
+            @"SystemSurvey"
+        };
 
         CancellationTokenSource cToken;
 
@@ -73,10 +76,10 @@ namespace BaseLmPlugin
                 if (key == null)
                     throw new ArgumentNullException("Key");
 
-                if (String.IsNullOrWhiteSpace(key.Username))
+                if (string.IsNullOrWhiteSpace(key.Username))
                     throw new ArgumentNullException("Username");
 
-                if (String.IsNullOrWhiteSpace(key.Password))
+                if (string.IsNullOrWhiteSpace(key.Password))
                     throw new ArgumentNullException("Password");
                 
                 #endregion
@@ -85,7 +88,7 @@ namespace BaseLmPlugin
                 string fulleExePath = Environment.ExpandEnvironmentVariables(context.Executable.ExecutablePath);
 
                 //if working directory not specified set it to null
-                string workingDirectory = String.IsNullOrWhiteSpace(context.Executable.WorkingDirectory) ? null : Environment.ExpandEnvironmentVariables(context.Executable.WorkingDirectory);
+                string workingDirectory = string.IsNullOrWhiteSpace(context.Executable.WorkingDirectory) ? null : Environment.ExpandEnvironmentVariables(context.Executable.WorkingDirectory);
 
                 string userName = key.Username;
                 string passWord = key.Password;
@@ -93,7 +96,7 @@ namespace BaseLmPlugin
                 #region VALIDATE FILE EXISTS
                 if (!File.Exists(fulleExePath))
                 {
-                    context.WriteMessage(String.Format("BattleNet executable not found at {0}", fulleExePath));
+                    context.WriteMessage(string.Format("BattleNet executable not found at {0}", fulleExePath));
                     return;
                 }
                 #endregion
@@ -102,7 +105,7 @@ namespace BaseLmPlugin
                 //ensure no battlenet processes running
                 foreach (var processModuleFileName in processImageFileNames)
                 {
-                    if (String.IsNullOrWhiteSpace(processModuleFileName))
+                    if (string.IsNullOrWhiteSpace(processModuleFileName))
                         continue;
 
                     var processList = Process.GetProcessesByName(processModuleFileName);
@@ -114,7 +117,7 @@ namespace BaseLmPlugin
                         }
                         catch
                         {
-                            Trace.WriteLine(String.Format("Could not kill BattleNet process {0}", processModuleFileName));
+                            Trace.WriteLine(string.Format("Could not kill BattleNet process {0}", processModuleFileName));
                         }
                     });
                 }
@@ -135,6 +138,9 @@ namespace BaseLmPlugin
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = fulleExePath;
                 startInfo.WorkingDirectory = workingDirectory;
+
+                //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                //startInfo.CreateNoWindow = true;
 
                 //create process class
                 Process bnProcess = new Process() { StartInfo = startInfo };
@@ -199,6 +205,8 @@ namespace BaseLmPlugin
                         //block user input
                         User32.BlockInput(true);
 
+                        Thread.Sleep(5000);
+
                         KeyboardSimulator sim = new KeyboardSimulator();
                         MouseSimulator msim = new MouseSimulator();
 
@@ -240,7 +248,7 @@ namespace BaseLmPlugin
                     }
                     catch(Exception ex)
                     {
-                        Console.WriteLine("License installation failed {0}", ex);
+                        context.WriteMessage(string.Format("License installation failed {0}", ex.Message));
                     }  
                     finally
                     {

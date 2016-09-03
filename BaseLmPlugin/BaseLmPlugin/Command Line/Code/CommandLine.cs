@@ -61,10 +61,10 @@ namespace BaseLmPlugin
                 //get expanded key arguments            
                 string newArguments = Environment.ExpandEnvironmentVariables(licenseKey.Value);
 
-                if (!String.IsNullOrWhiteSpace(executableArgument))
+                if (!string.IsNullOrWhiteSpace(executableArgument))
                 {
                     //compile parameters
-                    process.StartInfo.Arguments = String.Format("{0} {1}", newArguments, executableArgument);
+                    process.StartInfo.Arguments = string.Format("{0} {1}", newArguments, executableArgument);
                 }
                 else
                 {

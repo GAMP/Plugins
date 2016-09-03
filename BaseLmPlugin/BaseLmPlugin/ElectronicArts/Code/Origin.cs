@@ -20,7 +20,7 @@ namespace BaseLmPlugin
 {
     #region OriginLicenseManager
     [Export(typeof(ILicenseManagerPlugin))]
-    [PluginMetadata("EA Origin","1.0.0.0","Manages license keys by sending credentials input to application window.","BaseLmPlugin;BaseLmPlugin.Resources.Icons.origin.png")]
+    [PluginMetadata("EA Origin", "1.0.0.0", "Manages license keys by sending credentials input to application window.", "BaseLmPlugin;BaseLmPlugin.Resources.Icons.origin.png")]
     public class OriginLicenseManager : SteamLicenseManager
     {
         #region Interface
@@ -65,7 +65,7 @@ namespace BaseLmPlugin
                     return;
                 }
 
-                if(!File.Exists(originPath))
+                if (!File.Exists(originPath))
                 {
                     context.Client.Log.AddError(String.Format("Origin client executable not found at {0}.", originPath), null, LogCategories.Configuration);
                     return;
@@ -194,7 +194,7 @@ namespace BaseLmPlugin
                 }
                 #endregion
 
-                string processName = Path.GetFileNameWithoutExtension(originPath);          
+                string processName = Path.GetFileNameWithoutExtension(originPath);
 
                 #region Initialize Process
 
@@ -203,7 +203,7 @@ namespace BaseLmPlugin
 
                 bool processExisted = originProcess != null;
 
-                if(!processExisted)
+                if (!processExisted)
                 {
                     ProcessStartInfo startInfo = new ProcessStartInfo();
                     startInfo.FileName = originPath;
@@ -215,7 +215,7 @@ namespace BaseLmPlugin
                     //create origin process
                     originProcess = new Process() { StartInfo = startInfo };
                 }
-     
+
                 originProcess.EnableRaisingEvents = true;
                 originProcess.Exited += new EventHandler(OnInternalProcessExited);
 
@@ -328,7 +328,7 @@ namespace BaseLmPlugin
             using (var key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(@"SOFTWARE\Origin\", false))
             {
                 if (key != null)
-                    originPath = key.GetValue("ClientPath").ToString();                
+                    originPath = key.GetValue("ClientPath").ToString();
             }
             return originPath;
         }
@@ -391,11 +391,11 @@ namespace BaseLmPlugin
             }
         }
 
-        private bool FocusField(Process originProcess, OriginInputFileds field ,int tries)
+        private bool FocusField(Process originProcess, OriginInputFileds field, int tries)
         {
             WindowInfo window = new WindowInfo(originProcess.MainWindowHandle);
             WindowsInput.KeyboardSimulator sim = new WindowsInput.KeyboardSimulator();
-         
+
             for (int i = 0; i < tries; i++)
             {
                 try
@@ -412,14 +412,14 @@ namespace BaseLmPlugin
                     OriginInputFileds focusedField = OriginInputFileds.None;
                     OriginInputFileds checkedField = OriginInputFileds.None;
 
-                    bool aero_on =false ;
+                    bool aero_on = false;
 
                     //check if aero is on
                     if (Environment.OSVersion.Version.Major > 5)
                         Win32API.Modules.DwmApi.DwmIsCompositionEnabled(out aero_on);
-                 
+
                     //grab snapshot
-                    var image =aero_on? Imaging.CaptureScreenRegion(originProcess.MainWindowHandle) : Imaging.CaptureWindowImage(originProcess.MainWindowHandle);
+                    var image = aero_on ? Imaging.CaptureScreenRegion(originProcess.MainWindowHandle) : Imaging.CaptureWindowImage(originProcess.MainWindowHandle);
 
                     if (this.GetFields(image, out focusedField, out checkedField))
                     {
@@ -447,26 +447,26 @@ namespace BaseLmPlugin
             return false;
         }
 
-#endregion
+        #endregion
     }
-#endregion
+    #endregion
 
-#region OriginLicenseManagerSettings
+    #region OriginLicenseManagerSettings
     [Serializable]
     public class OriginLicenseManagerSettings : SteamLicenseManagerSettings, IPluginSettings
     {
     }
-#endregion
+    #endregion
 
-#region OriginLicenseKey
+    #region OriginLicenseKey
     [Serializable()]
     public class OriginLicenseKey : UserNamePasswordLicenseKeyBase
     {
 
     }
-#endregion
+    #endregion
 
-#region OriginInputFileds
+    #region OriginInputFileds
     [Flags()]
     public enum OriginInputFileds : int
     {
@@ -479,5 +479,5 @@ namespace BaseLmPlugin
         Invisible = 32,
         CreateAccount = 64,
     }
-#endregion
+    #endregion
 }

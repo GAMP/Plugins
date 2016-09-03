@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ImageSource x:Key="icon-deep-freeze">../Resources/Icons/df_small.png</ImageSource>
+    
+    <DataTemplate x:Key="_deep_freeze_display_template">
+        <StackPanel Orientation="Horizontal">
+            <Image Width="16" Height="16"  Source="{StaticResource icon-deep-freeze}"/>
+        </StackPanel>      
+    </DataTemplate>
+    
+</ResourceDictionary>
