@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IntegrationLib;
 using ServerService;
-using System.Windows;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.ComponentModel.Composition;
+using GizmoDALV2;
 
 namespace ServicePlugins
 {
@@ -47,9 +42,8 @@ namespace ServicePlugins
         public override void OnImportsSatisfied()
         {
             //ONLY ADD LISTENER IF ENVIRONEMNT IS INTERACTIVE
-            if (Environment.UserInteractive)
+            if (EnvironmentEx.IsUserInteractiveOrDocker)
                 Trace.Listeners.Add(listener);
-           
         }
         #endregion
 
@@ -91,13 +85,13 @@ namespace ServicePlugins
 
             public override void Write(string message)
             {
-                if (Environment.UserInteractive)
+                if (EnvironmentEx.IsUserInteractiveOrDocker)
                     Console.Write(message);
             }
 
             public override void WriteLine(string message)
             {
-                if (Environment.UserInteractive)
+                if (EnvironmentEx.IsUserInteractiveOrDocker)
                     Console.WriteLine(message);
             }
 
@@ -111,5 +105,22 @@ namespace ServicePlugins
         }
         #endregion
     }
+    #endregion
+
+    #region DatabaseHookPlugin
+
+    public class DatabaseHookPlugin : GizmoServiceHookPluginBase
+    {
+        public override void OnImportsSatisfied()
+        {
+            base.OnImportsSatisfied();
+
+            using (var cx = this.Service.GetDbContext())
+            {
+                //execute db related code here  
+            }
+        }
+    }
+
     #endregion
 }

@@ -166,3 +166,5 @@ pip-log.txt
 *.svn
 
 *.dll
+/.vs/GizmoPlugins/v15/Server/sqlite3
+/BaseLmPlugin/BaseLmPlugin/.vs/BaseLmPlugin/v15/sqlite3

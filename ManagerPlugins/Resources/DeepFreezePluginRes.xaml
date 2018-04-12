@@ -2,11 +2,34 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ImageSource x:Key="icon-deep-freeze">../Resources/Icons/df_small.png</ImageSource>
-    
+
     <DataTemplate x:Key="_deep_freeze_display_template">
-        <StackPanel Orientation="Horizontal">
-            <Image Width="16" Height="16"  Source="{StaticResource icon-deep-freeze}"/>
-        </StackPanel>      
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Stretch"
+                    Visibility="{Binding DeepFreezeInstalled,Converter={StaticResource BoolToVisibilityConverter}}">
+            <Image Width="16"
+                   Height="16"
+                   Source="{StaticResource icon-deep-freeze}">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DeepFreezeEnabled}"
+                                         Value="False">
+                                <Setter Property="Opacity"
+                                        Value="0.6" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+
+            <ProgressBar IsIndeterminate="True"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Stretch"
+                         Width="50"
+                         Margin="2"
+                         Visibility="{Binding IsWorking,Converter={StaticResource BoolToVisibilityConverter}}" />
+        </StackPanel>
     </DataTemplate>
-    
+
 </ResourceDictionary>
